@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,5 +109,25 @@ public class PollService {
         List<ChoiceVoteCount> votes = voteRepository.countByPollIdInGroupByChoiceId(pollIds);
         Map<Long, Long> choiceVotesMap = votes.stream().collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
         return choiceVotesMap;
+    }
+
+    // Soru sil
+    public Boolean deletePoll(Long pollId) {
+        pollRepository.deleteById(pollId);
+        return true;
+    }
+
+    public Poll updatePoll(Long pollId, PollRequest pollRequest) {
+        Optional<Poll> optionalPoll = pollRepository.findById(pollId);
+        Poll poll = optionalPoll.get();
+
+        poll.setQuestion(pollRequest.getQuestion());
+
+        // burada sorun var
+        pollRequest.getChoices().forEach(choiceRequest -> {
+            poll.addChoice(new Choice(choiceRequest.getText()));
+        });
+
+        return pollRepository.save(poll);
     }
 }
