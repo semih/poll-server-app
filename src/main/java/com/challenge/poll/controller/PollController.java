@@ -8,6 +8,7 @@ import com.challenge.poll.payload.response.PollResponse;
 import com.challenge.poll.repository.PollRepository;
 import com.challenge.poll.repository.UserRepository;
 import com.challenge.poll.repository.VoteRepository;
+import com.challenge.poll.security.CurrentUser;
 import com.challenge.poll.security.CustomUserDetails;
 import com.challenge.poll.service.PollService;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class PollController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createPoll(@RequestBody PollRequest pollRequest) {
         Poll poll = pollService.createPoll(pollRequest);
 
