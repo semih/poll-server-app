@@ -151,10 +151,12 @@ public class PollService {
 
     Map<Long, User> getPollCreatorMap(List<Poll> polls) {
         // Get Poll Creator details of the given list of polls
-        List<Long> creatorIds = polls.stream()
-                .map(Poll::getCreatedBy)
-                .distinct()
-                .collect(Collectors.toList());
+        List<Long> creatorIds = new ArrayList<Long>();
+
+        polls.forEach(poll -> {
+            Long creatorId = poll.getCreatedBy();
+            creatorIds.add(creatorId);
+        });
 
         List<User> creators = userRepository.findByIdIn(creatorIds);
         Map<Long, User> creatorMap = creators.stream()

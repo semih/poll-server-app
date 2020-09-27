@@ -30,10 +30,10 @@ public class ModelMapper {
         }).collect(Collectors.toList());
 
         pollResponse.setChoices(choiceResponses);
-        /*
+
         UserSummary creatorSummary = new UserSummary(creator.getId(), creator.getUsername(), creator.getName());
         pollResponse.setCreatedBy(creatorSummary);
-        */
+
         return pollResponse;
     }
 }

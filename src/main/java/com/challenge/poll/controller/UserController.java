@@ -1,6 +1,7 @@
 package com.challenge.poll.controller;
 import com.challenge.poll.payload.response.UserSummary;
 import com.challenge.poll.repository.UserRepository;
+import com.challenge.poll.security.CurrentUser;
 import com.challenge.poll.security.CustomUserDetails;
 import com.challenge.poll.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class UserController {
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
-    public UserSummary getCurrentUser(CustomUserDetails currentUser) {
+    public UserSummary getCurrentUser(@CurrentUser CustomUserDetails currentUser) {
         UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
         return userSummary;
     }
