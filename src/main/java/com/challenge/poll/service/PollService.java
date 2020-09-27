@@ -105,7 +105,7 @@ public class PollService {
         return ModelMapper.mapPollToPollResponse(poll, choiceVotesMap);
     }
 
-    // Hangi soruya kaç defa yanıt verilmiş?
+    // Hangi cevap kaç defa seçilmiş?
     private Map<Long, Long> getChoiceVoteCountMap(List<Long> pollIds) {
         List<ChoiceVoteCount> votes = voteRepository.countByPollIdInGroupByChoiceId(pollIds);
         Map<Long, Long> choiceVotesMap = votes.stream().collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
