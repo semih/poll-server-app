@@ -1,8 +1,8 @@
 package com.challenge.poll.controller;
 
 import com.challenge.poll.model.jpa.User;
-import com.challenge.poll.payload.JwtAuthenticationResponse;
-import com.challenge.poll.payload.LoginRequest;
+import com.challenge.poll.payload.response.JwtAuthenticationResponse;
+import com.challenge.poll.payload.request.LoginRequest;
 import com.challenge.poll.repository.UserRepository;
 import com.challenge.poll.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,20 +52,4 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
-    @PostMapping(value = "/token/generate")
-    public ResponseEntity<?> register(@RequestBody User loginUser) throws AuthenticationException {
-        System.out.println("We're in man!");
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginUser.getUsername(),
-                        loginUser.getPassword()
-                )
-        );
-        System.out.println("(Username, Password): (" + loginUser.getUsername() + ", " + loginUser.getPassword() + ")");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final Optional<User> user = userRepository.findByUsername(loginUser.getUsername());
-        final String token = tokenProvider.generateToken(authentication);
-        System.out.println("Token Controller Access=> Token Generated: " + token);
-        return ResponseEntity.ok(token);
-    }
 }

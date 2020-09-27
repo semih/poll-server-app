@@ -1,4 +1,4 @@
-package com.challenge.poll.payload;
+package com.challenge.poll.payload.response;
 
 public class UserSummary {
     private Long id;

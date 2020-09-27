@@ -1,5 +1,5 @@
 package com.challenge.poll.controller;
-import com.challenge.poll.payload.UserSummary;
+import com.challenge.poll.payload.response.UserSummary;
 import com.challenge.poll.repository.UserRepository;
 import com.challenge.poll.security.CustomUserDetails;
 import com.challenge.poll.service.UserService;

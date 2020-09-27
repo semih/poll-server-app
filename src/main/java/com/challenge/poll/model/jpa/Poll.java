@@ -1,5 +1,5 @@
 package com.challenge.poll.model.jpa;
-import com.challenge.poll.model.jpa.Choice;
+import com.challenge.poll.model.UserAudit;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "polls")
-public class Poll {
+public class Poll extends UserAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

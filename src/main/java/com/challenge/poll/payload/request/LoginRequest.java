@@ -1,4 +1,4 @@
-package com.challenge.poll.payload;
+package com.challenge.poll.payload.request;
 
 public class LoginRequest {
 

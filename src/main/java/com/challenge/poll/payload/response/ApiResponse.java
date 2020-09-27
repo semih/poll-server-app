@@ -1,4 +1,4 @@
-package com.challenge.poll.payload;
+package com.challenge.poll.payload.response;
 
 public class ApiResponse {
     private Boolean success;
