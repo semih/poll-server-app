@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,24 +40,24 @@ public class PollService {
 
     private static final Logger logger = LoggerFactory.getLogger(PollService.class);
 
+    // Tüm anket sorularını getir
     public List<PollResponse> getAllPolls() {
 
         List<Poll> polls = pollRepository.findAll();
         List<Long> pollIds = polls.stream().map(Poll::getId).collect(Collectors.toList());
 
         Map<Long, Long> choiceVoteCountMap = getChoiceVoteCountMap(pollIds);
-        Map<Long, User> creatorMap = getPollCreatorMap(polls);
-
         List<PollResponse> pollResponses = new ArrayList<PollResponse>();
 
         polls.forEach(poll -> {
-            PollResponse pollResponse = ModelMapper.mapPollToPollResponse( poll, choiceVoteCountMap, creatorMap.get( poll.getCreatedBy()));
+            PollResponse pollResponse = ModelMapper.mapPollToPollResponse( poll, choiceVoteCountMap);
             pollResponses.add(pollResponse);
         });
 
         return pollResponses;
     }
 
+    // Anket sorusu oluştur
     public Poll createPoll(PollRequest pollRequest) {
         Poll poll = new Poll();
         poll.setQuestion(pollRequest.getQuestion());
@@ -68,31 +69,18 @@ public class PollService {
         return pollRepository.save(poll);
     }
 
+    // Tek bir anket sorusuna ait bilgileri getir
     public PollResponse getPollById(Long pollId) {
-        Poll poll = pollRepository.findById(pollId).orElseThrow(
-                () -> new RuntimeException(String.format("Poll not found with id : '%s'", pollId)));
-
-        // Retrieve Vote Counts of every choice belonging to the current poll
+        Poll poll = pollRepository.findById(pollId).orElseThrow(() -> new RuntimeException(String.format("Poll not found with id : '%s'", pollId)));
         List<ChoiceVoteCount> votes = voteRepository.countByPollIdGroupByChoiceId(pollId);
-
-        Map<Long, Long> choiceVotesMap = votes.stream()
-                .collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
-
-        // Retrieve poll creator details
-        User creator = userRepository.findById(poll.getCreatedBy())
-                .orElseThrow(() -> new RuntimeException(String.format("User not found with id : '%s'", poll.getCreatedBy())));
-
-        // Retrieve vote done by logged in user
+        Map<Long, Long> choiceVotesMap = votes.stream().collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
         PollResponse pollResponse = new PollResponse();
-
-
-        return ModelMapper.mapPollToPollResponse(poll, choiceVotesMap,  creator);
+        return ModelMapper.mapPollToPollResponse(poll, choiceVotesMap);
     }
 
+    // Oy ver
     public PollResponse castVoteAndGetUpdatedPoll(Long pollId, VoteRequest voteRequest, CustomUserDetails currentUser) {
-        Poll poll = pollRepository.findById(pollId)
-                .orElseThrow(() -> new RuntimeException(String.format("Poll not found with id : '%s'", pollId)));
-
+        Poll poll = pollRepository.findById(pollId).orElseThrow(() -> new RuntimeException(String.format("Poll not found with id : '%s'", pollId)));
         User user = userRepository.getOne(currentUser.getId());
 
         Choice selectedChoice = poll.getChoices().stream()
@@ -112,56 +100,15 @@ public class PollService {
             throw new RuntimeException("Sorry! You have already cast your vote in this poll");
         }
 
-        //-- Vote Saved, Return the updated Poll Response now --
-
-        // Retrieve Vote Counts of every choice belonging to the current poll
         List<ChoiceVoteCount> votes = voteRepository.countByPollIdGroupByChoiceId(pollId);
-
-        Map<Long, Long> choiceVotesMap = votes.stream()
-                .collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
-
-        // Retrieve poll creator details
-        User creator = userRepository.findById(poll.getCreatedBy())
-                .orElseThrow(() -> new RuntimeException(String.format("User not found with id : '%s'", poll.getCreatedBy())));
-
-        return ModelMapper.mapPollToPollResponse(poll, choiceVotesMap, creator);
+        Map<Long, Long> choiceVotesMap = votes.stream().collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
+        return ModelMapper.mapPollToPollResponse(poll, choiceVotesMap);
     }
 
+    // Hangi soruya kaç defa yanıt verilmiş?
     private Map<Long, Long> getChoiceVoteCountMap(List<Long> pollIds) {
-        // Retrieve Vote Counts of every Choice belonging to the given pollIds
         List<ChoiceVoteCount> votes = voteRepository.countByPollIdInGroupByChoiceId(pollIds);
-
-        Map<Long, Long> choiceVotesMap = votes.stream()
-                .collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
-
+        Map<Long, Long> choiceVotesMap = votes.stream().collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
         return choiceVotesMap;
-    }
-
-    private Map<Long, Long> getPollUserVoteMap(CustomUserDetails currentUser, List<Long> pollIds) {
-        // Retrieve Votes done by the logged in user to the given pollIds
-        Map<Long, Long> pollUserVoteMap = null;
-        if(currentUser != null) {
-            List<Vote> userVotes = voteRepository.findByUserIdAndPollIdIn(currentUser.getId(), pollIds);
-
-            pollUserVoteMap = userVotes.stream()
-                    .collect(Collectors.toMap(vote -> vote.getPoll().getId(), vote -> vote.getChoice().getId()));
-        }
-        return pollUserVoteMap;
-    }
-
-    Map<Long, User> getPollCreatorMap(List<Poll> polls) {
-        // Get Poll Creator details of the given list of polls
-        List<Long> creatorIds = new ArrayList<Long>();
-
-        polls.forEach(poll -> {
-            Long creatorId = poll.getCreatedBy();
-            creatorIds.add(creatorId);
-        });
-
-        List<User> creators = userRepository.findByIdIn(creatorIds);
-        Map<Long, User> creatorMap = creators.stream()
-                .collect(Collectors.toMap(User::getId, Function.identity()));
-
-        return creatorMap;
     }
 }
