@@ -1,14 +1,14 @@
 package com.challenge.poll.model.jpa;
-import com.challenge.poll.model.UserAudit;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "polls")
-public class Poll extends UserAudit {
+public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +24,11 @@ public class Poll extends UserAudit {
 
     private List<Choice> choices = new ArrayList<>();
 
-    private Instant expirationDateTime;
+    @CreatedBy
+    private Long createdBy;
+
+    @LastModifiedBy
+    private Long updatedBy;
 
     public Long getId() {
         return id;
@@ -50,14 +54,6 @@ public class Poll extends UserAudit {
         this.choices = choices;
     }
 
-    public Instant getExpirationDateTime() {
-        return expirationDateTime;
-    }
-
-    public void setExpirationDateTime(Instant expirationDateTime) {
-        this.expirationDateTime = expirationDateTime;
-    }
-
     public void addChoice(Choice choice) {
         choices.add(choice);
         choice.setPoll(this);
@@ -66,5 +62,21 @@ public class Poll extends UserAudit {
     public void removeChoice(Choice choice) {
         choices.remove(choice);
         choice.setPoll(null);
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Long getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Long updatedBy) {
+        this.updatedBy = updatedBy;
     }
 }

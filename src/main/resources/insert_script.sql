@@ -19,8 +19,8 @@ INSERT INTO `choices` (`id`,`text`,`poll_id`) VALUES (5,'albatros',2);
 INSERT INTO `choices` (`id`,`text`,`poll_id`) VALUES (6,'akbaba',2);
 
 -- Query: SELECT * FROM polling_app.polls
-INSERT INTO `polls` (`id`,`question`,`expiration_date_time`,`created_at`,`updated_at`,`created_by`,`updated_by`) VALUES (1,'Dünyadaki insan sayısının 1 milyon katı kadar bir popülasyona sahip olan hayvan hangisidir?','2025-09-12 00:00:00','2020-09-28 00:00:00','2020-09-27 00:00:00',1,NULL);
-INSERT INTO `polls` (`id`,`question`,`expiration_date_time`,`created_at`,`updated_at`,`created_by`,`updated_by`) VALUES (2,'Kanatlarını çırpmadan bir gün boyunca havada kalabilen kuş türü sence hangisidir?','2025-09-12 00:00:00','2020-09-28 00:00:00','2020-09-28 00:00:00',1,NULL);
+INSERT INTO `polls` (`id`,`question`,`expiration_date_time`,`created_at`,`updated_at`,`created_by`,`updated_by`) VALUES (1,'Dünyadaki insan sayısının 1 milyon katı kadar bir popülasyona sahip olan hayvan hangisidir?','2025-09-12 00:00:00','2020-09-28 00:00:00','2020-09-27 00:00:00',NULL,NULL);
+INSERT INTO `polls` (`id`,`question`,`expiration_date_time`,`created_at`,`updated_at`,`created_by`,`updated_by`) VALUES (2,'Kanatlarını çırpmadan bir gün boyunca havada kalabilen kuş türü sence hangisidir?','2025-09-12 00:00:00','2020-09-28 00:00:00','2020-09-28 00:00:00',NULL,NULL);
 
 -- Query: SELECT * FROM polling_app.votes
 INSERT INTO `votes` (`id`,`user_id`,`poll_id`,`choice_id`,`created_at`,`updated_at`) VALUES (1,2,1,3,'2020-09-27 15:47:16','2020-09-27 15:47:16');
