@@ -65,7 +65,7 @@ public class PollController {
 
     @PostMapping("/{pollId}/votes")
     @PreAuthorize("hasRole('USER')")
-    public PollResponse castVote(CustomUserDetails currentUser,
+    public PollResponse castVote(@CurrentUser CustomUserDetails currentUser,
                                  @PathVariable Long pollId,
                                  @RequestBody VoteRequest voteRequest) {
         return pollService.castVoteAndGetUpdatedPoll(pollId, voteRequest, currentUser);

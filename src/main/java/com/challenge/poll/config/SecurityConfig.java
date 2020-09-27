@@ -20,11 +20,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity              // primary spring security annotation that is used to enable web security
-@EnableGlobalMethodSecurity(    // method level security based on annotations.
-        securedEnabled = true,  // enables the @Secured annotation
-        jsr250Enabled = true,   // enables the @RolesAllowed annotation
-        prePostEnabled = true   // enables the @PreAuthorize and @PostAuthorize annotations
+@EnableWebSecurity              // web güvenliğini aktif etmek için
+@EnableGlobalMethodSecurity(    // metot seviyesinde güvenlik
+        securedEnabled = true,  // @Secured annotation
+        jsr250Enabled = true,   // @RolesAllowed annotation
+        prePostEnabled = true   // @PreAuthorize, @PostAuthorize annotation
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired

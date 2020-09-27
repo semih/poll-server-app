@@ -9,9 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface PollRepository extends JpaRepository<Poll, Long> {
+
     Optional<Poll> findById(Long pollId);
-
-    List<Poll> findByIdIn(List<Long> pollIds);
-
-    List<Poll> findByIdIn(List<Long> pollIds, Sort sort);
+    
 }

@@ -1,6 +1,5 @@
 package com.challenge.poll.controller;
 
-import com.challenge.poll.model.jpa.User;
 import com.challenge.poll.payload.response.JwtAuthenticationResponse;
 import com.challenge.poll.payload.request.LoginRequest;
 import com.challenge.poll.repository.UserRepository;
