@@ -3,8 +3,10 @@ package com.challenge.poll.model;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
+@MappedSuperclass
 public abstract class UserAudit implements Serializable {
 
     @CreatedBy
