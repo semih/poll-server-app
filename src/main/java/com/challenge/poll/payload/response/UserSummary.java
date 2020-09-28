@@ -1,14 +1,20 @@
 package com.challenge.poll.payload.response;
 
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
+
 public class UserSummary {
     private Long id;
     private String username;
     private String name;
+    private Collection<? extends GrantedAuthority> authorities;
 
-    public UserSummary(Long id, String username, String name) {
+    public UserSummary(Long id, String username, String name, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.name = name;
+        this.authorities = authorities;
     }
 
     public Long getId() {
@@ -33,5 +39,13 @@ public class UserSummary {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 }
