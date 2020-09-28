@@ -14,6 +14,7 @@ import com.challenge.poll.service.PollService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,11 @@ public class PollController {
         return pollService.getAllPolls();
     }
 
+    @GetMapping("/{pollId}")
+    public PollResponse getPollById(@PathVariable Long pollId) {
+        return pollService.getPollById(pollId);
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createPoll(@RequestBody PollRequest pollRequest) {
@@ -54,13 +60,24 @@ public class PollController {
                 .fromCurrentRequest().path("/{pollId}")
                 .buildAndExpand(poll.getId()).toUri();
 
-        return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "Poll Created Successfully"));
+        return ResponseEntity.created(location).body(new ApiResponse(true, "Poll Created Successfully"));
     }
 
-    @GetMapping("/{pollId}")
-    public PollResponse getPollById(@PathVariable Long pollId) {
-        return pollService.getPollById(pollId);
+    @PutMapping("/{pollId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updatePoll(@PathVariable Long pollId, @RequestBody PollRequest pollRequest) {
+        if(pollService.updatePoll(pollId, pollRequest) == null) {
+            return new ResponseEntity<String>("Poll Not Found", HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<String>("Poll Updated Successfully", HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping("/{pollId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deletePoll(@PathVariable Long pollId) {
+        pollService.deletePoll(pollId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @PostMapping("/{pollId}/votes")

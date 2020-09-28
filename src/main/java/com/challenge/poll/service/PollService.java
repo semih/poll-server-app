@@ -19,11 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,11 +36,11 @@ public class PollService {
 
     private static final Logger logger = LoggerFactory.getLogger(PollService.class);
 
-    // Tüm anket sorularını getir
     public List<PollResponse> getAllPolls() {
 
         List<Poll> polls = pollRepository.findAll();
-        List<Long> pollIds = polls.stream().map(Poll::getId).collect(Collectors.toList());
+        List<Long> pollIds =new ArrayList<Long>();
+        polls.forEach(poll -> { pollIds.add(poll.getId()); });
 
         Map<Long, Long> choiceVoteCountMap = getChoiceVoteCountMap(pollIds);
         List<PollResponse> pollResponses = new ArrayList<PollResponse>();
@@ -57,7 +53,6 @@ public class PollService {
         return pollResponses;
     }
 
-    // Anket sorusu oluştur
     public Poll createPoll(PollRequest pollRequest) {
         Poll poll = new Poll();
         poll.setQuestion(pollRequest.getQuestion());
@@ -69,7 +64,6 @@ public class PollService {
         return pollRepository.save(poll);
     }
 
-    // Tek bir anket sorusuna ait bilgileri getir
     public PollResponse getPollById(Long pollId) {
         Poll poll = pollRepository.findById(pollId).orElseThrow(() -> new RuntimeException(String.format("Poll not found with id : '%s'", pollId)));
         List<ChoiceVoteCount> votes = voteRepository.countByPollIdGroupByChoiceId(pollId);
@@ -78,7 +72,6 @@ public class PollService {
         return ModelMapper.mapPollToPollResponse(poll, choiceVotesMap);
     }
 
-    // Oy ver
     public PollResponse castVoteAndGetUpdatedPoll(Long pollId, VoteRequest voteRequest, CustomUserDetails currentUser) {
         Poll poll = pollRepository.findById(pollId).orElseThrow(() -> new RuntimeException(String.format("Poll not found with id : '%s'", pollId)));
         User user = userRepository.getOne(currentUser.getId());
@@ -105,10 +98,27 @@ public class PollService {
         return ModelMapper.mapPollToPollResponse(poll, choiceVotesMap);
     }
 
-    // Hangi cevap kaç defa seçilmiş?
     private Map<Long, Long> getChoiceVoteCountMap(List<Long> pollIds) {
         List<ChoiceVoteCount> votes = voteRepository.countByPollIdInGroupByChoiceId(pollIds);
         Map<Long, Long> choiceVotesMap = votes.stream().collect(Collectors.toMap(ChoiceVoteCount::getChoiceId, ChoiceVoteCount::getVoteCount));
         return choiceVotesMap;
+    }
+
+    public void deletePoll(Long pollId) {
+        pollRepository.deleteById(pollId);
+    }
+
+    public Poll updatePoll(Long pollId, PollRequest pollRequest) {
+        Optional<Poll> optionalPoll = pollRepository.findById(pollId);
+        Poll poll = optionalPoll.get();
+        List<Choice> listChoice = new ArrayList<Choice>();
+
+        pollRequest.getChoices().forEach(choiceRequest -> {
+            listChoice.add(new Choice(choiceRequest.getText()));
+        });
+
+        poll.setQuestion(pollRequest.getQuestion());
+        poll.setChoices(listChoice);
+        return pollRepository.save(poll);
     }
 }
