@@ -5,8 +5,6 @@ import com.challenge.poll.model.jpa.Choice;
 import com.challenge.poll.model.jpa.Poll;
 import com.challenge.poll.model.jpa.User;
 import com.challenge.poll.model.jpa.Vote;
-import com.challenge.poll.payload.request.ChoiceRequest;
-import com.challenge.poll.payload.request.ListChoiceRequest;
 import com.challenge.poll.payload.request.PollRequest;
 import com.challenge.poll.payload.request.VoteRequest;
 import com.challenge.poll.payload.response.PollResponse;
@@ -41,7 +39,8 @@ public class PollService {
     public List<PollResponse> getAllPolls() {
 
         List<Poll> polls = pollRepository.findAll();
-        List<Long> pollIds = polls.stream().map(Poll::getId).collect(Collectors.toList());
+        List<Long> pollIds =new ArrayList<Long>();
+        polls.forEach(poll -> { pollIds.add(poll.getId()); });
 
         Map<Long, Long> choiceVoteCountMap = getChoiceVoteCountMap(pollIds);
         List<PollResponse> pollResponses = new ArrayList<PollResponse>();
