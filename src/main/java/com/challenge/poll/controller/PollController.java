@@ -75,12 +75,9 @@ public class PollController {
 
     @DeleteMapping("/{pollId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deletePoll(@PathVariable Long pollId) {
-        if(!pollService.deletePoll(pollId)) {
-            return new ResponseEntity<String>("Poll Not Found", HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<String>("Poll Deleted Successfully", HttpStatus.OK);
-        }
+    public ResponseEntity<Void> deletePoll(@PathVariable Long pollId) {
+        pollService.deletePoll(pollId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @PostMapping("/{pollId}/votes")
