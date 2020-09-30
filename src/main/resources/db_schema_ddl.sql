@@ -1,3 +1,10 @@
+DROP TABLE votes;
+DROP TABLE choices;
+DROP TABLE polls;
+DROP TABLE user_roles;
+DROP TABLE users;
+DROP TABLE roles;
+
 CREATE TABLE `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
@@ -17,7 +24,7 @@ CREATE TABLE `roles` (
   `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_roles_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `user_roles` (
@@ -33,7 +40,6 @@ CREATE TABLE `user_roles` (
 CREATE TABLE `polls` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `question` varchar(140) NOT NULL,
-  `expiration_date_time` datetime NOT NULL,
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   `created_by` bigint(20) DEFAULT NULL,
