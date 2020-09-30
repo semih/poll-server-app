@@ -11,8 +11,8 @@ INSERT INTO `user_roles` (`user_id`,`role_id`) VALUES (1,1);
 INSERT INTO `user_roles` (`user_id`,`role_id`) VALUES (2,2);
 
 -- Query: SELECT * FROM polling_app.polls
-INSERT INTO `polls` (`id`,`question`,`expiration_date_time`,`created_at`,`updated_at`,`created_by`,`updated_by`) VALUES (1,'Dünyadaki insan sayısının 1 milyon katı kadar bir popülasyona sahip olan hayvan hangisidir?','2025-09-12 00:00:00','2020-09-28 00:00:00','2020-09-27 00:00:00',NULL,NULL);
-INSERT INTO `polls` (`id`,`question`,`expiration_date_time`,`created_at`,`updated_at`,`created_by`,`updated_by`) VALUES (2,'Kanatlarını çırpmadan bir gün boyunca havada kalabilen kuş türü sence hangisidir?','2025-09-12 00:00:00','2020-09-28 00:00:00','2020-09-28 00:00:00',NULL,NULL);
+INSERT INTO `polls` (`id`,`question`,`created_at`,`updated_at`,`created_by`,`updated_by`) VALUES (1,'Dünyadaki insan sayısının 1 milyon katı kadar bir popülasyona sahip olan hayvan hangisidir?','2020-09-28 00:00:00','2020-09-27 00:00:00',NULL,NULL);
+INSERT INTO `polls` (`id`,`question`,`created_at`,`updated_at`,`created_by`,`updated_by`) VALUES (2,'Kanatlarını çırpmadan bir gün boyunca havada kalabilen kuş türü sence hangisidir?','2020-09-28 00:00:00','2020-09-28 00:00:00',NULL,NULL);
 
 -- Query: SELECT * FROM polling_app.choices
 INSERT INTO `choices` (`id`,`text`,`poll_id`) VALUES (1,'sinek',1);

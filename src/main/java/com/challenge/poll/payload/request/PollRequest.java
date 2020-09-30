@@ -9,16 +9,6 @@ public class PollRequest {
 
     private List<ChoiceRequest> choices;
 
-    public Instant getExpirationDateTime() {
-        return expirationDateTime;
-    }
-
-    public void setExpirationDateTime(Instant expirationDateTime) {
-        this.expirationDateTime = expirationDateTime;
-    }
-
-    private Instant expirationDateTime;
-
     public String getQuestion() {
         return question;
     }

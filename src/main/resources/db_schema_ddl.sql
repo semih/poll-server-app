@@ -40,7 +40,6 @@ CREATE TABLE `user_roles` (
 CREATE TABLE `polls` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `question` varchar(140) NOT NULL,
-  `expiration_date_time` datetime NOT NULL,
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   `created_by` bigint(20) DEFAULT NULL,
