@@ -1,6 +1,6 @@
 -- Query: SELECT * FROM polling_app.users
-INSERT INTO `users` (`id`,`name`,`username`,`email`,`password`,`created_at`,`updated_at`) VALUES (1,'Admin','admin','adminuser@gmail.com','123457','2020-09-27 15:08:03','2020-09-27 15:08:03');
-INSERT INTO `users` (`id`,`name`,`username`,`email`,`password`,`created_at`,`updated_at`) VALUES (2,'Semih','semihk','semihkirdinli@gmail.com','123456','2020-09-26 15:29:29','2020-09-26 15:29:29');
+INSERT INTO `users` (`id`,`name`,`username`,`email`,`password`,`created_at`,`updated_at`) VALUES (1,'Admin','admin','admin@admin.com','123','2020-09-27 15:08:03','2020-09-27 15:08:03');
+INSERT INTO `users` (`id`,`name`,`username`,`email`,`password`,`created_at`,`updated_at`) VALUES (2,'Semih','semih','semihkirdinli@gmail.com','123','2020-09-26 15:29:29','2020-09-26 15:29:29');
 
 -- Query: SELECT * FROM polling_app.roles
 INSERT INTO `roles` (`id`,`name`) VALUES (1,'ROLE_ADMIN');
