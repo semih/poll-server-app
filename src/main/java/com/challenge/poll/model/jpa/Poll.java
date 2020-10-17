@@ -5,6 +5,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "polls")
@@ -52,6 +53,7 @@ public class Poll {
 
     public void setChoices(List<Choice> choices) {
         this.choices = choices;
+
     }
 
     public void addChoice(Choice choice) {

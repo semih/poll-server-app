@@ -20,6 +20,17 @@ public class Choice {
 
     }
 
+    public Choice(String text, Poll poll, Long id) {
+        this.text = text;
+        this.poll = poll;
+        this.id = id;
+    }
+
+    public Choice(String text, Poll poll) {
+        this.text = text;
+        this.poll = poll;
+    }
+
     public Choice(String text) {
         this.text = text;
     }

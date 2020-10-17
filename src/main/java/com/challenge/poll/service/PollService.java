@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.jws.WebParam;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -111,14 +112,14 @@ public class PollService {
     public Poll updatePoll(Long pollId, PollRequest pollRequest) {
         Optional<Poll> optionalPoll = pollRepository.findById(pollId);
         Poll poll = optionalPoll.get();
-        List<Choice> listChoice = new ArrayList<Choice>();
+
+        poll.getChoices().removeAll(poll.getChoices());
+        poll.setQuestion(pollRequest.getQuestion());
 
         pollRequest.getChoices().forEach(choiceRequest -> {
-            listChoice.add(new Choice(choiceRequest.getText()));
+            poll.addChoice(new Choice(choiceRequest.getText()));
         });
 
-        poll.setQuestion(pollRequest.getQuestion());
-        poll.setChoices(listChoice);
         return pollRepository.save(poll);
     }
 }
