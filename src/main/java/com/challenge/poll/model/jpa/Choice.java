@@ -15,22 +15,7 @@ public class Choice {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "poll_id", nullable = false)
     private Poll poll;
-
-    public Choice() {
-
-    }
-
-    public Choice(String text, Poll poll, Long id) {
-        this.text = text;
-        this.poll = poll;
-        this.id = id;
-    }
-
-    public Choice(String text, Poll poll) {
-        this.text = text;
-        this.poll = poll;
-    }
-
+    
     public Choice(String text) {
         this.text = text;
     }
