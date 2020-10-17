@@ -52,7 +52,6 @@ public class Poll {
 
     public void setChoices(List<Choice> choices) {
         this.choices = choices;
-
     }
 
     public void addChoice(Choice choice) {
